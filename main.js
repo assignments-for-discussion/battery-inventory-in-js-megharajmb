@@ -1,11 +1,32 @@
 const assert = require('assert');
 
 function countBatteriesByHealth(presentCapacities) {
-  return {
+
+  const RATED_CAPACITY = 120;
+
+  let counts = {
     healthy: 0,
     exchange: 0,
     failed: 0
   };
+
+  presentCapacities.forEach(capacity => {
+
+    const soh = (100 * capacity) / RATED_CAPACITY;
+
+    if (soh > 83 && soh <= 100) {
+      counts.healthy++;
+    }
+    else if (soh >= 63 && soh <= 83) {
+      counts.exchange++;
+    }
+    else {
+      counts.failed++;
+    }
+
+  });
+
+  return counts;
 }
 
 function testBucketingByHealth() {
@@ -15,6 +36,7 @@ function testBucketingByHealth() {
   assert(counts["healthy"] == 2);
   assert(counts["exchange"] == 3);
   assert(counts["failed"] == 1);
+
   console.log("Done counting :)");
 }
 
